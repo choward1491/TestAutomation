@@ -70,7 +70,8 @@ void TestAutomator::runTests(){
 // define method to output statistics
 void TestAutomator::outputStatistics(){
     double percentSuccess = 100.0*static_cast<double>(successful_tests)/static_cast<double>(unit_tests.size());
-    printf("About %0.1lf%% of Unit Tests Passed.\n",percentSuccess);
+    printf("%0.1lf%% of Unit Tests Passed.\n",percentSuccess);
+    printf("There was %i successes and %i failures\n",successful_tests, (int)unit_tests.size() - successful_tests);
 }
 
 void TestAutomator::addTest( UnitTest* test ){

@@ -50,7 +50,7 @@ public:
                             bool runTest();\
                             ~TestName(){}\
                             };\
-                            TestName TestName ## 1;
+                            TestName TestName ## _;
 
     #define TEST_F(TestName) bool TestName::runTest()
 #else
