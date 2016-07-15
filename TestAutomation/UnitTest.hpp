@@ -43,9 +43,9 @@ public:
 
 #ifdef UNIT_TEST
     #define FRIEND_TEST(TestName) friend class TestName;
-    #define TEST(TestName) class TestName : public UnitTest { \
+    #define TEST(Group,TestName) class TestName : public UnitTest { \
                             public:\
-                            TestName(){ TestAutomator::automator.addTest(this); }\
+                            TestName(){ TestAutomator::automator.addTest(#Group,this); }\
                             std::string getName() const { return #TestName; }\
                             bool runTest();\
                             ~TestName(){}\
@@ -55,7 +55,7 @@ public:
     #define TEST_F(TestName) bool TestName::runTest()
 #else
     #define FRIEND_TEST(TestName)
-    #define TEST(TestName)
+    #define TEST(Group,TestName)
     #define TEST_F(TestName)
 #endif
 

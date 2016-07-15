@@ -32,6 +32,8 @@
 
 
 #include <vector>
+#include <map>
+#include <string>
 
 
 class UnitTest;
@@ -39,17 +41,20 @@ class UnitTest;
 class TestAutomator {
 public:
     static TestAutomator automator;
+    typedef std::map<std::string,std::vector<UnitTest*> > TestSets;
+    typedef std::map<std::string,int> TestSuccesses;
     
     TestAutomator();
     ~TestAutomator();
     void runTests();
-    void addTest( UnitTest* test );
+    void addTest( std::string group, UnitTest* test );
     
 private:
     void outputStatistics();
-    std::vector<UnitTest*> unit_tests;
-    std::vector<bool> test_result;
-    int successful_tests;
+    TestSets unit_tests;
+    TestSuccesses successes;
+    int totalSuccesses;
+    int totalTests;
     
 };
 

@@ -35,31 +35,52 @@
 TestAutomator TestAutomator::automator;
 
 // define constructor
-TestAutomator::TestAutomator():unit_tests(0){
-    successful_tests = 0;
+TestAutomator::TestAutomator(){
+    totalTests = 0;
+    totalSuccesses =0 ;
 }
 
 // define destructor
 TestAutomator::~TestAutomator(){
-    for(int i = 0; i < unit_tests.size(); i++ ){
-        unit_tests[i] = 0;
-    }
+    
 }
 
 // define method to run the tests
 void TestAutomator::runTests(){
-    successful_tests = 0;
     
-    // run the tests
-    for(int i =0; i < unit_tests.size(); i++ ){
-        test_result[i] = unit_tests[i]->runTest();
-        bool success = test_result[i];
-        if( success ){
-            printf("\033[1;32m[\xE2\x9C\x93]\033[0m - %s\n",unit_tests[i]->getName().c_str());
-            successful_tests++;
-        }else{
-            printf("\033[1;31m[ ]\033[0m - %s\n",unit_tests[i]->getName().c_str());
+    // init iterators
+    TestSets::iterator it = unit_tests.begin();
+    TestSuccesses::iterator success_counter = successes.begin();
+    
+    // init overall-test statistic variables
+    totalSuccesses = 0;
+    totalTests = 0;
+    
+    printf("\n");
+    
+    // loop through each test group
+    for(; it != unit_tests.end(); ++it, ++success_counter ){
+        std::string group = it->first;
+        success_counter->second = 0;
+        
+        printf("Test Group %s\n",group.c_str());
+        printf("-----------------------------------------\n");
+        
+        // loop through each test in the current test group
+        for(int i = 0; i < it->second.size(); i++ ){
+            UnitTest * test = it->second[i];
+            bool success = test->runTest();
+            
+            if( success ){
+                printf("\033[1;32m[\xE2\x9C\x93]\033[0m - %s\n",test->getName().c_str());
+                success_counter->second++;
+                ++totalSuccesses;
+            }else{
+                printf("\033[1;31m[ ]\033[0m - %s\n",test->getName().c_str());
+            }
+            ++totalTests;
         }
+        printf("\n");
     }
     
     // output statistics
@@ -69,14 +90,31 @@ void TestAutomator::runTests(){
 
 // define method to output statistics
 void TestAutomator::outputStatistics(){
-    double percentSuccess = 100.0*static_cast<double>(successful_tests)/static_cast<double>(unit_tests.size());
-    printf("%0.1lf%% of Unit Tests Passed.\n",percentSuccess);
-    printf("There was %i successes and %i failures\n",successful_tests, (int)unit_tests.size() - successful_tests);
+    
+    // compute and show group success
+    TestSuccesses::iterator it = successes.begin();
+    
+    // loop through each test group
+    for(; it != successes.end(); ++it ){
+        std::string group = it->first;
+        int success_count = it->second;
+        int fail_count = static_cast<int>(unit_tests[group].size()) - success_count;
+        
+        printf("Test Group %s| \033[1;32m%i\033[0m Successes, \033[1;31m%i\033[0m Failures\n",group.c_str(), success_count, fail_count);
+        
+    }
+    
+    
+    // compute and share overall success
+    printf("\n");
+    double overallSuccess = 100.0*static_cast<double>(totalSuccesses)/static_cast<double>(totalTests);
+    printf("%0.1lf%% of All Unit Tests Passed.\n",overallSuccess);
+    printf("There was %i successes and %i failures, overall.\n\n",totalSuccesses, totalTests - totalSuccesses);
 }
 
-void TestAutomator::addTest( UnitTest* test ){
-    unit_tests.push_back(test);
-    test_result.push_back(false);
+void TestAutomator::addTest( std::string group, UnitTest* test ){
+    unit_tests[group].push_back(test);
+    successes[group] = 0;
 }
 
 
