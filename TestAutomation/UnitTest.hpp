@@ -50,9 +50,8 @@ public:
                             bool runTest();\
                             ~TestName(){}\
                             };\
-                            TestName TestName ## _;
-
-    #define TEST_F(TestName) bool TestName::runTest()
+                            TestName TestName ## _;\
+                            bool TestName::runTest()
 #else
     #define FRIEND_TEST(TestName)
     #define TEST(Group,TestName)

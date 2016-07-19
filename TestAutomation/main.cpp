@@ -18,29 +18,25 @@ private:
 };
 
 // Sample Test Number 1
-TEST(Math,Addition_With_Positive_Numbers)
-TEST_F(Addition_With_Positive_Numbers) {
+TEST(Math,Addition_With_Positive_Numbers) {
     SomeClass sc;
     return 3 == sc.add(1,2);
  }
 
 // Sample Test Number 2
-TEST(Math,Addition_With_Negative_Numbers)
-TEST_F(Addition_With_Negative_Numbers) {
+TEST(Math,Addition_With_Negative_Numbers) {
     SomeClass sc;
     return -5 == sc.add(-1,-4);
 }
 
 // Sample Test Number 3
-TEST(Math,Addition_With_Negative_Numbers2)
-TEST_F(Addition_With_Negative_Numbers2) {
+TEST(Math,Addition_With_Negative_Numbers2) {
     SomeClass sc;
     return -5 == sc.add(-1,-3);
 }
 
 // Sample Test Number 4
-TEST(Math2,Addition_With_Mixed_Signs)
-TEST_F(Addition_With_Mixed_Signs) {
+TEST(Math2,Addition_With_Mixed_Signs) {
     SomeClass sc;
     return 2 == sc.add(-1,3);
 }
